@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Álbum das Raízes</title>
+  <meta name="description" content="Jogo educativo para o Dia da Consciência Negra: conheça pessoas, lugares e culturas que fazem nossa história. Para o 1º, 2º e 3º ano.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect x='14' y='10' width='72' height='80' rx='8' fill='%23e76f51'/><path d='M50 26 L56 42 L73 42 L59 52 L64 69 L50 59 L36 69 L41 52 L27 42 L44 42 Z' fill='%23ffd166'/></svg>">
+  <!-- O "?v=" obriga o navegador a baixar a versão nova dos arquivos.
+       Ao mudar algum arquivo, aumente o número em todas as linhas. -->
+  <link rel="stylesheet" href="css/estilo.css?v=1">
+</head>
+<body>
+  <a class="pular" href="#tela">Pular para o jogo</a>
+
+  <header class="barra" id="barra">
+    <div class="marca">
+      <span class="marca-icone" data-icone="album"></span>
+      <span class="marca-nome">Álbum das Raízes</span>
+    </div>
+    <nav class="barra-botoes" aria-label="Botões do jogo">
+      <button type="button" class="botao-barra" id="botao-mapa"><span data-icone="casa"></span><span>Mapa</span></button>
+      <button type="button" class="botao-barra" id="botao-album"><span data-icone="album"></span><span>Álbum</span></button>
+      <button type="button" class="botao-barra botao-ajuda" id="botao-ajuda"><span data-icone="ajuda"></span><span>Como jogar</span></button>
+      <button type="button" class="botao-barra botao-pausa" id="botao-pausa"><span data-icone="pausa"></span><span>Pausa</span></button>
+      <button type="button" class="botao-barra botao-som" id="botao-som" aria-pressed="false"><span data-icone="somDesligado"></span><span>Som: desligado</span></button>
+    </nav>
+  </header>
+
+  <main id="tela" class="tela" tabindex="-1">
+    <noscript>
+      <p class="aviso-noscript">Para jogar o Álbum das Raízes, o JavaScript do navegador precisa estar ligado.</p>
+    </noscript>
+  </main>
+
+  <footer class="rodape">
+    <button type="button" class="botao-professor" id="botao-professor"><span data-icone="chave"></span><span>Área do professor</span></button>
+  </footer>
+
+  <!-- Mensagens lidas por leitores de tela. -->
+  <div id="anuncio" class="so-leitor" aria-live="polite"></div>
+
+  <!-- Todos os textos ficam em js/conteudo.js -->
+  <script src="js/conteudo.js?v=1"></script>
+  <script src="js/desenhos.js?v=1"></script>
+  <script src="js/brincadeiras.js?v=1"></script>
+  <script src="js/jogo.js?v=1"></script>
+</body>
+</html>
