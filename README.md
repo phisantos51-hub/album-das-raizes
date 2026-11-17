@@ -58,7 +58,8 @@ Botão discreto **Área do professor**, no canto de baixo da tela. Para entrar, 
 - `js/desenhos.js`: as ilustrações, desenhadas em código.
 - `js/brincadeiras.js`: Terra-Mar, mancala (oware) e shisima.
 - `js/jogo.js`: telas, figurinhas, álbum, pausa, som, Acessibilidade e Área do professor.
-- `js/voz.js`: a voz do jogo e os sons criados pelo próprio jogo (incluindo os instrumentos).
+- `js/voz.js`: a voz do jogo e os sons de acerto, figurinha e sementes.
+- `js/instrumentos.js`: os sons do berimbau, atabaque, agogô, ganzá e kalimba, calculados pelo próprio jogo imitando como cada instrumento vibra (sem gravações).
 - `js/modo-audio.js`: as telas faladas do Modo Áudio e a atividade de braille.
 - `REVISAR.md`: **lista de todas as informações históricas e culturais** para conferir antes de usar com as turmas.
 

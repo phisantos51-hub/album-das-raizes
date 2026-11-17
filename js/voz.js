@@ -199,56 +199,46 @@ const VOZ = (function () {
     o.start(t); o.stop(t + 0.5);
   }
 
-  /* ----- Instrumentos (sons simples que lembram cada um) ----- */
-  const INSTRUMENTOS = {
-    berimbau: function (c, t) {
-      // "tch, tch, dóim, dóim": dois toques abafados e notas de arame vibrando.
-      chiado(c, t, 0.06, 0.25, "bandpass", 2500);
-      chiado(c, t + 0.3, 0.06, 0.25, "bandpass", 2500);
-      [[0.6, 98, 104], [1.25, 110, 116], [1.9, 98, 104], [2.5, 98, 98]].forEach(function (x) {
-        const o = c.createOscillator();
-        const f = c.createBiquadFilter();
-        const g = c.createGain();
-        o.type = "sawtooth";
-        o.frequency.setValueAtTime(x[1], t + x[0]);
-        o.frequency.linearRampToValueAtTime(x[2], t + x[0] + 0.3);
-        f.type = "lowpass"; f.frequency.value = 1400; f.Q.value = 9;
-        g.gain.setValueAtTime(0.0001, t + x[0]);
-        g.gain.exponentialRampToValueAtTime(0.22, t + x[0] + 0.01);
-        g.gain.exponentialRampToValueAtTime(0.0001, t + x[0] + 0.55);
-        o.connect(f); f.connect(g); g.connect(c.destination);
-        o.start(t + x[0]); o.stop(t + x[0] + 0.6);
-      });
-      return 3.2;
-    },
-    atabaque: function (c, t) {
-      // Grave, grave, tapa, grave, grave, tapa.
-      [[0, "g"], [0.35, "g"], [0.7, "a"], [1.2, "g"], [1.55, "g"], [1.9, "a"]].forEach(function (x) {
-        if (x[1] === "g") tambor(c, t + x[0], 95, 0.7);
-        else { tambor(c, t + x[0], 190, 0.35); chiado(c, t + x[0], 0.08, 0.2, "bandpass", 1200); }
-      });
-      return 2.5;
-    },
-    agogo: function (c, t) {
-      // Sino fino (pequeno) e sino grosso (grande).
-      function sino(f, tt) { nota(c, f, tt, 0.5, 0.18, "sine"); nota(c, f * 2.76, tt, 0.25, 0.06, "sine"); nota(c, f * 5.4, tt, 0.12, 0.03, "sine"); }
-      [[0, 1046], [0.3, 1046], [0.6, 784], [1.0, 1046], [1.3, 784], [1.6, 784]].forEach(function (x) { sino(x[1], t + x[0]); });
-      return 2.2;
-    },
-    ganza: function (c, t) {
-      // Chacoalhar: chiados curtos com acentos.
-      for (let i = 0; i < 12; i++) chiado(c, t + i * 0.17, 0.09, i % 4 === 0 ? 0.3 : 0.14, "highpass", 4500);
-      return 2.2;
-    },
-    kalimba: function (c, t) {
-      // Notas suaves que soam e somem devagar.
-      [523, 659, 784, 880, 784, 659, 587, 523].forEach(function (f, i) {
-        nota(c, f, t + i * 0.32, 1.2, 0.2, "sine");
-        nota(c, f * 4.1, t + i * 0.32, 0.15, 0.03, "sine");
-      });
-      return 3.4;
+  /* ----- Instrumentos -----
+     Os sons são calculados em js/instrumentos.js (imitando como cada
+     instrumento vibra) e guardados para tocar de novo sem recalcular. */
+  const guardados = {};
+  let eco = null;
+
+  function tocarInstrumento(c, t, nome) {
+    if (typeof INSTRUMENTOS_SOM === "undefined") return 0;
+    if (!guardados[nome]) {
+      const g = INSTRUMENTOS_SOM.gerar(nome, c.sampleRate);
+      if (!g) return 0;
+      const buf = c.createBuffer(1, g.som.length, c.sampleRate);
+      buf.getChannelData(0).set(g.som);
+      guardados[nome] = { buf: buf, dur: g.dur };
     }
-  };
+    if (!eco) {
+      const ir = INSTRUMENTOS_SOM.ecoDeSala(c.sampleRate);
+      eco = c.createConvolver();
+      const b = c.createBuffer(1, ir.length, c.sampleRate);
+      b.getChannelData(0).set(ir);
+      eco.buffer = b;
+      const volEco = c.createGain();
+      volEco.gain.value = 0.18;
+      eco.connect(volEco); volEco.connect(c.destination);
+    }
+    const fonte = c.createBufferSource();
+    fonte.buffer = guardados[nome].buf;
+    const vol = c.createGain();
+    vol.gain.value = 0.8;
+    fonte.connect(vol);
+    vol.connect(c.destination);
+    vol.connect(eco);
+    fonte.start(t);
+    return guardados[nome].dur;
+  }
+
+  const INSTRUMENTOS = {};
+  ["berimbau", "atabaque", "agogo", "ganza", "kalimba"].forEach(function (nome) {
+    INSTRUMENTOS[nome] = function (c, t) { return tocarInstrumento(c, t, nome); };
+  });
 
   // Toca um efeito ou instrumento e avisa quando acabar.
   function tocar(nome, aoTerminar) {
