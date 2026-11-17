@@ -359,21 +359,21 @@ body.ano-1 .pista p { font-size: 1.75rem; }
 /* Mancala (oware) */
 .mc-niveis { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; margin-bottom: 0.8rem; }
 .mc-niveis-rotulo { font-weight: bold; font-size: 1.15rem; }
-.mc-layout, .sh-layout { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); gap: 1.25rem; align-items: start; }
+.mc-layout, .sh-layout { display: grid; grid-template-columns: minmax(0, 2.6fr) minmax(0, 1fr); gap: 1.25rem; align-items: start; }
 .mc-tabuleiro {
-  display: grid; grid-template-columns: 6.5rem 1fr 6.5rem; gap: 0.6rem; align-items: stretch;
+  display: grid; grid-template-columns: 5.5rem minmax(0, 1fr) 5.5rem; gap: 0.6rem; align-items: stretch;
   background: #8b5a2b; border: 6px solid var(--contorno); border-radius: 40px; padding: 0.8rem;
   box-shadow: inset 0 0 0 4px #a1683a;
 }
-.mc-linhas { display: flex; flex-direction: column; gap: 0.5rem; }
-.mc-linha { display: grid; grid-template-columns: repeat(var(--casas), 1fr); gap: 0.5rem; }
+.mc-linhas { display: flex; flex-direction: column; gap: 0.5rem; min-width: 0; }
+.mc-linha { display: grid; grid-template-columns: repeat(var(--casas), minmax(0, 1fr)); gap: 0.5rem; }
 .mc-quem { display: flex; align-items: center; justify-content: center; gap: 0.4rem; color: #fff; font-weight: bold; font-size: 1.1rem; }
 .mc-seta .icone { width: 1.6rem; height: 1.6rem; color: #ffd166; }
 .mc-casa {
-  position: relative; aspect-ratio: 1;
+  position: relative; aspect-ratio: 1; width: 100%; min-width: 0; overflow: hidden;
   display: flex; flex-direction: column; align-items: center; justify-content: center;
   border-radius: 50%; border: 4px solid var(--contorno);
-  background: #5d3a1a; color: #fff; padding: 0.3rem;
+  background: #5d3a1a; color: #fff; padding: 0.15rem; gap: 0.1rem;
 }
 .mc-casa.voce.pode { background: #7a4b22; box-shadow: 0 0 0 4px #ffd166; }
 .mc-casa.voce.pode:hover { background: #9c6430; }
@@ -381,9 +381,9 @@ body.ano-1 .pista p { font-size: 1.75rem; }
 .mc-casa.ativa { box-shadow: 0 0 0 6px #fff !important; background: #a86b3c; }
 .mc-casa.captura { background: #2a9d8f; box-shadow: 0 0 0 6px #b7e4c7 !important; animation: aparecer 0.4s 2; }
 .mc-casa.dica { box-shadow: 0 0 0 7px #e63946 !important; animation: tremer 0.3s 3; }
-.mc-sementes { display: flex; flex-wrap: wrap; justify-content: center; gap: 2px; max-width: 80%; }
-.mc-semente { width: 0.7rem; height: 0.55rem; border-radius: 50%; background: #f5deb3; border: 1px solid #3b2a1a; }
-.mc-numero { font-weight: bold; font-size: 1.35rem; text-shadow: 0 1px 2px #000; }
+.mc-sementes { display: flex; flex-wrap: wrap; justify-content: center; align-content: flex-end; gap: 2px; max-width: 78%; max-height: 42%; overflow: hidden; }
+.mc-semente { width: 0.6rem; height: 0.48rem; border-radius: 50%; background: #f5deb3; border: 1px solid #3b2a1a; }
+.mc-numero { font-weight: bold; font-size: 1.35rem; line-height: 1; text-shadow: 0 1px 2px #000; }
 .mc-deposito { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.3rem; border-radius: 40px; border: 4px solid var(--contorno); background: #5d3a1a; color: #fff; padding: 0.5rem; text-align: center; }
 .mc-deposito.voce { background: #1b6e5f; }
 .mc-deposito-rotulo { font-size: 0.85rem; font-weight: bold; }
@@ -526,7 +526,7 @@ body.ano-1 .explicacao { font-size: 1.5rem; }
   .ligar { grid-template-columns: 1fr 1fr; }
   .ligar-meio { display: none; }
   .ligar-coluna:last-child { grid-template-columns: 1fr; }
-  .mc-tabuleiro { grid-template-columns: 4.5rem 1fr 4.5rem; padding: 0.5rem; }
+  .mc-tabuleiro { grid-template-columns: 4.5rem minmax(0, 1fr) 4.5rem; padding: 0.5rem; }
   .botao-barra span:last-child { font-size: 0.9rem; }
 }
 @media (max-width: 560px) {
@@ -693,3 +693,11 @@ html.alto-contraste .audio-mc-casa { background: #000; border-color: #fff; color
 html.alto-contraste .audio-mc-casa.ativa,
 html.alto-contraste .audio-mc-casa.escolhida { box-shadow: 0 0 0 5px #ffff00; }
 html.alto-contraste .estacao.fechada .estacao-desenho { filter: grayscale(1) brightness(1.8); opacity: 1; }
+
+/* Mancala e shisima: em telas estreitas ou com letras maiores, as regras
+   ficam embaixo do tabuleiro, para as casinhas terem espaço. */
+@media (max-width: 1300px) {
+  .mc-layout, .sh-layout { grid-template-columns: minmax(0, 1fr); }
+  .mc-tabuleiro, .sh-tabuleiro { max-width: 60rem; margin-left: auto; margin-right: auto; }
+}
+html.letras-grandes .mc-layout, html.letras-grandes .sh-layout { grid-template-columns: minmax(0, 1fr); }
