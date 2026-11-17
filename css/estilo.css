@@ -538,3 +538,158 @@ body.ano-1 .explicacao { font-size: 1.5rem; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
 }
+
+/* =================================================================
+   ACESSIBILIDADE
+   ================================================================= */
+
+/* Botão "Acessibilidade" na tela inicial. */
+.botao-acessibilidade { background: #264653; color: #fff; margin-bottom: 0.5rem; }
+.botao-acessibilidade:hover:not(:disabled) { background: #1d3640; }
+.botao-acessibilidade .icone { width: 2rem; height: 2rem; }
+
+/* Painel de acessibilidade. */
+.marcadores { display: flex; flex-direction: column; gap: 0.6rem; margin: 0.8rem 0; }
+.marcador {
+  display: grid; grid-template-columns: auto 1fr; gap: 0.2rem 0.7rem; align-items: center;
+  background: #fff8e7; border: 3px solid #e5d9c3; border-radius: 14px; padding: 0.6rem 0.8rem;
+}
+.marcador input { width: 1.8rem; height: 1.8rem; margin: 0; cursor: pointer; accent-color: #2a9d8f; }
+.marcador label { font-size: 1.2rem; font-weight: bold; margin: 0; cursor: pointer; }
+.marcador-ajuda { grid-column: 2; margin: 0; font-size: 0.95rem; color: var(--texto-suave); }
+
+/* Estrela de braille nas figurinhas. */
+.estrela-braille {
+  display: inline-flex; align-items: center; gap: 0.2rem; margin-top: 0.3rem;
+  background: #ffd166; border: 2px solid var(--contorno); border-radius: 999px; padding: 0.05rem 0.6rem;
+  font-size: 0.85rem; font-weight: bold;
+}
+.estrela-braille .icone { width: 1.1rem; height: 1.1rem; color: #b45309; }
+
+/* Letras e botões maiores: tudo cresce junto. */
+html.letras-grandes { font-size: 23px; }
+
+/* ---------- Modo Áudio ---------- */
+.audio { max-width: 960px; margin: 0 auto; }
+.audio-titulo { font-size: 2rem; margin: 0 0 0.6rem; border-left: 14px solid #e76f51; padding-left: 0.75rem; }
+.fala-atual {
+  min-height: 3.5rem; margin: 0 0 1rem; padding: 0.8rem 1.2rem;
+  background: #fff; border: 5px solid var(--contorno); border-radius: 20px;
+  font-size: 1.45rem; font-weight: bold; line-height: 1.45;
+}
+.fala-atual:empty { display: none; }
+.audio-menu { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.6rem; }
+.audio-opcao {
+  width: 100%; min-height: 3.6rem; padding: 0.6rem 1.2rem; text-align: left;
+  background: #fff; border: 4px solid var(--contorno); border-radius: 16px;
+  font-size: 1.35rem; font-weight: bold; box-shadow: var(--sombra);
+}
+.audio-opcao:hover { background: #fff3c4; }
+.audio-opcao.atual, .audio-opcao:focus { background: #264653; color: #fff; outline: 6px solid #ffd166; outline-offset: 2px; }
+.audio-opcao.marcada::after { content: " ✓"; }
+.audio-opcao.certa { background: var(--verde-claro); color: #10431f; }
+.audio-opcao.errada { text-decoration: line-through; opacity: 0.75; }
+.audio-teclas { margin-top: 1.2rem; font-size: 1rem; color: var(--texto-suave); }
+.audio-dica { font-size: 1.3rem; font-weight: bold; }
+body.modo-audio .rodape { opacity: 0.6; }
+/* No Modo Áudio os sons ficam sempre ligados. */
+body.modo-audio #botao-som { display: none; }
+
+/* Cela braille (pontos 1-2-3 à esquerda, 4-5-6 à direita). */
+.cela { display: grid; grid-template-columns: repeat(2, 4.5rem); gap: 0.8rem 1.6rem; justify-content: center; margin: 1rem 0; }
+.cela-ponto {
+  width: 4.5rem; height: 4.5rem; border-radius: 50%; border: 5px solid var(--contorno);
+  display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: bold; background: #fff;
+}
+.cela-ponto.ligado { background: #264653; color: #fff; box-shadow: 0 0 0 6px #ffd166; }
+
+/* Mancala falada (para quem acompanha olhando). */
+.audio-mc { background: #8b5a2b; border: 5px solid var(--contorno); border-radius: 30px; padding: 0.8rem; color: #fff; margin-bottom: 1rem; }
+.audio-mc p { margin: 0.3rem 0; font-weight: bold; font-size: 1.2rem; }
+.audio-mc-linha { display: grid; grid-template-columns: repeat(auto-fit, minmax(7rem, 1fr)); gap: 0.5rem; margin: 0.4rem 0; }
+.audio-mc-casa { background: #5d3a1a; border: 3px solid #2b2118; border-radius: 16px; padding: 0.5rem; text-align: center; font-weight: bold; font-size: 1.15rem; }
+.audio-mc-casa.ativa { background: #a86b3c; box-shadow: 0 0 0 5px #fff; }
+.audio-mc-casa.escolhida { box-shadow: 0 0 0 5px #ffd166; }
+.audio-mc-casa.comp { background: #4a2e14; }
+
+/* ---------- Alto contraste ---------- */
+html.alto-contraste {
+  --fundo: #000; --papel: #000; --texto: #fff; --texto-suave: #fff; --contorno: #fff; --foco: #ffff00;
+  --verde-claro: #000; --laranja-claro: #000; --azul-claro: #000;
+}
+html.alto-contraste body { background: #000; background-image: none; color: #fff; }
+html.alto-contraste :focus-visible { outline: 6px solid #ffff00; outline-offset: 3px; }
+html.alto-contraste .barra { background: #000; border-bottom-color: #ffff00; }
+html.alto-contraste .botao-barra,
+html.alto-contraste .botao,
+html.alto-contraste .estacao,
+html.alto-contraste .pista,
+html.alto-contraste .janela,
+html.alto-contraste .album-pagina,
+html.alto-contraste .ligar-nome,
+html.alto-contraste .ligar-imagem,
+html.alto-contraste .cartao-brincadeira,
+html.alto-contraste .mc-regras,
+html.alto-contraste .qc-peca,
+html.alto-contraste .intro,
+html.alto-contraste .figurinha,
+html.alto-contraste .botao-ano,
+html.alto-contraste .marcador,
+html.alto-contraste .como-jogar .passos li,
+html.alto-contraste .fala-atual,
+html.alto-contraste .audio-opcao,
+html.alto-contraste .cela-ponto,
+html.alto-contraste .tm-ordem,
+html.alto-contraste .alfinete-nome,
+html.alto-contraste .etiqueta-ano,
+html.alto-contraste .estrela-braille,
+html.alto-contraste .figurinha-rotulo {
+  background: #000 !important; color: #fff !important; border-color: #fff !important; box-shadow: none;
+}
+html.alto-contraste .botao-principal,
+html.alto-contraste .audio-opcao.atual,
+html.alto-contraste .audio-opcao:focus,
+html.alto-contraste .botao.selecionado,
+html.alto-contraste .cela-ponto.ligado { background: #ffff00 !important; color: #000 !important; border-color: #ffff00 !important; }
+html.alto-contraste .botao-perigo { background: #000 !important; color: #ff6b6b !important; border-color: #ff6b6b !important; }
+html.alto-contraste .titulo-tela,
+html.alto-contraste .audio-titulo { border-left-color: #ffff00; color: #fff; }
+html.alto-contraste .inicio-titulo,
+html.alto-contraste .nova-figurinha h2,
+html.alto-contraste .comemoracao h2,
+html.alto-contraste .procure { color: #ffff00; text-shadow: none; }
+html.alto-contraste .mensagem.certo { background: #000; color: #fff; border-color: #00ff66; }
+html.alto-contraste .mensagem.tentar { background: #000; color: #fff; border-color: #ffff00; }
+html.alto-contraste .mensagem.dica { background: #000; color: #fff; border-color: #66ccff; }
+html.alto-contraste .mensagem .icone { color: #fff !important; }
+html.alto-contraste .opcao.certa { border-color: #00ff66; }
+html.alto-contraste .opcao.errada { border-color: #ffff00; }
+html.alto-contraste .figurinha-arte { border-color: #fff; }
+html.alto-contraste .progresso-barra { background: #000; border-color: #fff; }
+html.alto-contraste .progresso-barra span { background: #ffff00; }
+html.alto-contraste .trilha { background: #000; border-color: #fff; }
+html.alto-contraste .trilha-caminho { display: none; }
+html.alto-contraste .estacao-numero { background: #ffff00; color: #000; text-shadow: none; }
+html.alto-contraste .selo-feita { background: #000; border-color: #00ff66; color: #00ff66; }
+html.alto-contraste .botao-professor { color: #fff; border-color: #fff; }
+html.alto-contraste .fundo-janela { background: rgba(0, 0, 0, 0.85); }
+html.alto-contraste .marcador-ajuda,
+html.alto-contraste .audio-teclas,
+html.alto-contraste .ligar-grupo,
+html.alto-contraste .ver-numero,
+html.alto-contraste .lembrete { color: #fff; }
+html.alto-contraste .passo-numero { background: #ffff00; color: #000; }
+html.alto-contraste .passo-desenho,
+html.alto-contraste .pausa-icone { color: #fff; }
+html.alto-contraste .mc-passos li.agora { background: #000; outline-color: #ffff00; color: #ffff00; }
+html.alto-contraste .ligar-nome.escolhido,
+html.alto-contraste .ligar-imagem.escolhido,
+html.alto-contraste .qc-peca.escolhida { outline: 6px solid #ffff00; }
+html.alto-contraste .ligar-nome.ligado,
+html.alto-contraste .ligar-imagem.ligado { border-color: #00ff66 !important; }
+html.alto-contraste .cartao-acao { background: #ffff00; color: #000; }
+html.alto-contraste .audio-mc,
+html.alto-contraste .audio-mc-casa { background: #000; border-color: #fff; color: #fff; }
+html.alto-contraste .audio-mc-casa.ativa,
+html.alto-contraste .audio-mc-casa.escolhida { box-shadow: 0 0 0 5px #ffff00; }
+html.alto-contraste .estacao.fechada .estacao-desenho { filter: grayscale(1) brightness(1.8); opacity: 1; }

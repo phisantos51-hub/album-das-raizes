@@ -127,3 +127,72 @@ Para seguir o cuidado de “não inventar”, o jogo **não** usa:
 - conteúdos religiosos (por exemplo, o uso do acarajé e do atabaque em cerimônias religiosas);
 - bandeiras dos países (para evitar erros de desenho);
 - retratos ou fotos das personalidades.
+
+---
+
+## Modo Áudio: informações novas para revisar
+
+O Modo Áudio usa os mesmos textos históricos e culturais de cima, sem mudanças. Para ele foram **acrescentadas** só descrições e algumas frases faladas, que ficam no fim do arquivo `js/conteudo.js`, na parte **MODO ÁUDIO E ACESSIBILIDADE**. As frases abaixo trazem informação nova e merecem conferência.
+
+### Viagem pela África: onde fica cada país e que língua se fala
+
+Para descrever o lugar, o jogo pede para imaginar o mapa: **em cima é o norte, embaixo é o sul, à direita é o leste e à esquerda é o oeste**.
+
+| País | Onde fica (como o jogo fala) | Língua (como o jogo fala) | Conferido |
+|---|---|---|---|
+| **Egito** | lá em cima, no lado direito da África, perto do mar | A língua oficial é o árabe, não o português. | [ ] |
+| **Angola** | no lado esquerdo da África, mais para baixo, perto do mar | Também se fala português! É a língua oficial do país. | [ ] |
+| **Moçambique** | no lado direito da África, mais para baixo, perto do mar | Também se fala português! É a língua oficial do país. | [ ] |
+| **Nigéria** | no lado esquerdo da África, um pouco acima do meio, perto do mar | A língua oficial é o inglês, não o português. | [ ] |
+| **Gana** | no lado esquerdo da África, um pouco acima do meio, perto do mar, não muito longe da Nigéria | A língua oficial é o inglês, não o português. | [ ] |
+| **África do Sul** | lá embaixo, na ponta de baixo da África, entre dois oceanos | Há muitas línguas oficiais, como o zulu e o inglês; o português não é uma delas. | [ ] |
+| **Senegal** | no lado esquerdo da África, na parte mais à esquerda do continente, perto do mar | A língua oficial é o francês, não o português. | [ ] |
+| **Quênia** | no lado direito da África, bem no meio, perto do mar | As línguas oficiais são o inglês e o suaíli, não o português. | [ ] |
+
+Pergunta da viagem: “Em qual destes países também se fala português?” (resposta: Angola ou Moçambique).
+
+### Como é e como se toca cada instrumento
+
+Os sons dos instrumentos são **criados pelo próprio jogo** (sons simples que lembram cada instrumento, sem gravações). As descrições faladas:
+
+| Instrumento | O que o jogo diz | Conferido |
+|---|---|---|
+| **berimbau** | Arco de madeira com um fio de arame esticado e uma cabaça redonda. Toca-se batendo no arame com uma varinha, enquanto a outra mão encosta uma moeda ou uma pedrinha no arame. | [ ] |
+| **atabaque** | Tambor alto de madeira, com couro esticado em cima. Toca-se batendo no couro com as mãos. | [ ] |
+| **agogô** | Dois sininhos de metal presos juntos, um maior e um menor. Toca-se batendo neles com uma varinha: o pequeno faz um som fino e o grande, um som grosso. | [ ] |
+| **ganzá** | Tubo fechado, cheio de sementes ou pedrinhas. Toca-se chacoalhando para a frente e para trás. | [ ] |
+| **kalimba** | Caixinha de madeira com plaquinhas de metal de tamanhos diferentes. Toca-se puxando e soltando as plaquinhas com os polegares. | [ ] |
+
+### Descrições das ilustrações
+
+Cada figurinha ganhou uma descrição curta do desenho (por exemplo, “Figurinha de Carolina Maria de Jesus: um caderno aberto com um lápis”). Ela é falada no Modo Áudio e lida pelo NVDA e pelo Narrador também no jogo com mouse. As descrições só dizem o que está desenhado; estão no `js/conteudo.js`, em `descricoes`.
+
+- [ ] Conferi as descrições das ilustrações.
+
+### Braille
+
+A atividade opcional usa as letras da **Grafia Braille para a Língua Portuguesa**. As teclas F, D, S, J, K e L fazem os pontos 1, 2, 3, 4, 5 e 6. O jogo pede só a letra inicial, sem o sinal de letra maiúscula (pontos 4 e 6), para ficar mais simples no 1º ano.
+
+Letras iniciais que aparecem no jogo e seus pontos:
+
+| Letra | Pontos | Nomes | Conferido |
+|---|---|---|---|
+| A | 1 | Angola, Adhemar | [ ] |
+| Á | 1, 2, 3, 5 e 6 | África do Sul (o jogo também aceita o A sem acento, e explica o acento) | [ ] |
+| C | 1 e 4 | Carolina, Conceição | [ ] |
+| D | 1, 4 e 5 | Dandara | [ ] |
+| E | 1 e 5 | Egito, Enedina | [ ] |
+| G | 1, 2, 4 e 5 | Gilberto Gil, Gana | [ ] |
+| L | 1, 2 e 3 | Luiz Gama | [ ] |
+| M | 1, 3 e 4 | Machado de Assis, Milton Santos, Moçambique | [ ] |
+| N | 1, 3, 4 e 5 | Nigéria | [ ] |
+| Q | 1, 2, 3, 4 e 5 | Quênia | [ ] |
+| R | 1, 2, 3 e 5 | Rebeca Andrade, Ruth de Souza | [ ] |
+| S | 2, 3 e 4 | Senegal | [ ] |
+| Z | 1, 3, 5 e 6 | Zumbi | [ ] |
+
+### Simplificações do Modo Áudio
+
+- **Estação 2:** o quebra-cabeça do mapa é trocado pela “Viagem pela África” (menu falado de países e perguntas).
+- **Estação 3:** a mancala usa sempre o nível mais fácil (4 casas de cada lado, 3 sementes em cada), em ritmo lento. As casas são numeradas de 1 a 4 (do estudante) e de 5 a 8 (do computador). No 2º e no 3º ano, o shisima aparece como explicação falada e uma pergunta.
+- **Estação 4:** o “ligar” é trocado por perguntas faladas: o jogo diz a palavra e o estudante escolhe a descrição da imagem certa; nos instrumentos, o estudante ouve o som e escolhe o nome. Na “sala dos instrumentos” dá para ouvir os cinco instrumentos em qualquer ano.

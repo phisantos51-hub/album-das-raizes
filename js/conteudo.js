@@ -664,3 +664,156 @@ const CONTEUDO = {
     ]
   }
 };
+
+/* =================================================================
+   MODO ÁUDIO E ACESSIBILIDADE
+   =================================================================
+   Textos usados quando o Modo Áudio está ligado (o jogo fala e funciona
+   só com o teclado) e descrições das ilustrações para quem não enxerga.
+   Os textos históricos e culturais continuam lá em cima: aqui ficam só
+   DESCRIÇÕES e instruções faladas.
+
+   Para editar: troque só o que está entre aspas, como no resto do arquivo.
+   Os nomes antes dos dois-pontos (zumbi, egito, berimbau...) são os "id"
+   das figurinhas: NÃO MUDE esses nomes.
+   As informações novas (onde fica cada país, que língua se fala e como se
+   toca cada instrumento) também estão listadas no REVISAR.md.
+================================================================= */
+CONTEUDO.acessibilidade = {
+
+  /* Descrição de cada ilustração. Aparece como texto alternativo para
+     leitores de tela e é falada no Modo Áudio:
+     "Figurinha de Carolina Maria de Jesus: um caderno aberto com um lápis". */
+  descricoes: {
+    // Estação 1
+    zumbi: "uma palmeira alta com cocos, num dia de sol",
+    dandara: "uma estrela amarela entre folhas de palmeira",
+    carolina: "um caderno aberto com um lápis",
+    machado: "um livro aberto e uma pena de escrever",
+    rebeca: "uma medalha de ouro com uma fita verde e amarela",
+    gil: "um violão e notas musicais",
+    luizgama: "uma balança, que é o símbolo da Justiça",
+    enedina: "um capacete de engenheira, um esquadro e uma régua",
+    milton: "um globo terrestre com os continentes",
+    conceicao: "uma folha com um poema e uma pena de escrever",
+    ruth: "duas máscaras de teatro, uma alegre e uma pensativa",
+    adhemar: "três saltos marcados na areia, com os números 1, 2 e 3, e uma medalha",
+    // Estação 2
+    egito: "duas pirâmides no deserto, com o sol e um rio",
+    angola: "um balão de fala dizendo “Olá!” e prédios à beira-mar",
+    mocambique: "um barco à vela no mar azul",
+    nigeria: "uma claquete de cinema",
+    gana: "um pedaço de tecido kente, com faixas coloridas",
+    africadosul: "uma bola de futebol no gramado",
+    senegal: "um baobá, uma árvore de tronco muito grosso",
+    quenia: "uma girafa ao lado de prédios da cidade",
+    // Estação 3
+    terramar: "uma criança pulando sobre uma linha: de um lado a terra, do outro o mar",
+    oware: "um tabuleiro de madeira com duas fileiras de casinhas com sementes",
+    shisima: "um tabuleiro em forma de octógono, com peças amarelas e roxas",
+    // Estação 4
+    cacula: "duas crianças e um bebê, o irmão mais novo",
+    moleque: "um menino soltando pipa",
+    cochilo: "uma pessoa dormindo numa rede",
+    quitanda: "uma barraquinha com frutas",
+    cafune: "a mão de um adulto fazendo carinho na cabeça de uma criança",
+    micanga: "um colar de continhas coloridas",
+    berimbau: "um arco de madeira com uma cabaça e uma varinha",
+    atabaque: "um tambor alto de madeira",
+    agogo: "dois sininhos de metal e uma varinha",
+    kalimba: "uma caixinha de madeira com plaquinhas de metal",
+    ganza: "um chocalho em forma de tubo",
+    capoeira: "duas pessoas jogando capoeira",
+    acaraje: "dois bolinhos de acarajé num prato",
+    vatapa: "uma tigela de vatapá, um creme amarelo",
+    samba: "um pandeiro e notas musicais",
+    // Desafio final
+    guardiao: "um troféu dourado com uma estrela"
+  },
+
+  /* Viagem pela África (Estação 2 no Modo Áudio).
+     onde:      onde o país fica no continente, em linguagem simples.
+                Imagine o mapa da África: em cima é o norte, embaixo é o sul,
+                à direita é o leste e à esquerda é o oeste.
+     portugues: true se o português é língua oficial do país.
+     lingua:    frase falada sobre a língua do país. */
+  viagem: {
+    abertura: "Vamos fazer uma viagem pela África! Imagine o mapa da África: em cima é o norte, embaixo é o sul. Escolha um país com as setas e aperte Enter para visitar.",
+    paises: {
+      egito: { onde: "lá em cima, no lado direito da África, perto do mar", portugues: false, lingua: "No Egito, a língua oficial é o árabe, não o português." },
+      angola: { onde: "no lado esquerdo da África, mais para baixo, perto do mar", portugues: true, lingua: "Em Angola também se fala português! É a língua oficial do país." },
+      mocambique: { onde: "no lado direito da África, mais para baixo, perto do mar", portugues: true, lingua: "Em Moçambique também se fala português! É a língua oficial do país." },
+      nigeria: { onde: "no lado esquerdo da África, um pouco acima do meio, perto do mar", portugues: false, lingua: "Na Nigéria, a língua oficial é o inglês, não o português." },
+      gana: { onde: "no lado esquerdo da África, um pouco acima do meio, perto do mar, não muito longe da Nigéria", portugues: false, lingua: "Em Gana, a língua oficial é o inglês, não o português." },
+      africadosul: { onde: "lá embaixo, na ponta de baixo da África, entre dois oceanos", portugues: false, lingua: "Na África do Sul há muitas línguas oficiais, como o zulu e o inglês. O português não é uma delas." },
+      senegal: { onde: "no lado esquerdo da África, na parte mais à esquerda do continente, perto do mar", portugues: false, lingua: "No Senegal, a língua oficial é o francês, não o português." },
+      quenia: { onde: "no lado direito da África, bem no meio, perto do mar", portugues: false, lingua: "No Quênia, as línguas oficiais são o inglês e o suaíli, não o português." }
+    },
+    perguntaPortugues: "Em qual destes países também se fala português?",
+    fim: "Você respondeu todas as perguntas da viagem! Muito bem!"
+  },
+
+  /* Como é e como se toca cada instrumento (Estação 4 no Modo Áudio).
+     Os sons são criados pelo próprio jogo, sem gravações. */
+  instrumentos: {
+    berimbau: "O berimbau é um arco de madeira com um fio de arame esticado e uma cabaça redonda. Toca-se batendo no arame com uma varinha, enquanto a outra mão encosta uma moeda ou uma pedrinha no arame.",
+    atabaque: "O atabaque é um tambor alto de madeira, com couro esticado em cima. Toca-se batendo no couro com as mãos.",
+    agogo: "O agogô tem dois sininhos de metal presos juntos, um maior e um menor. Toca-se batendo neles com uma varinha: o pequeno faz um som fino e o grande, um som grosso.",
+    ganza: "O ganzá é um tubo fechado, cheio de sementes ou pedrinhas. Toca-se chacoalhando para a frente e para trás.",
+    kalimba: "A kalimba é uma caixinha de madeira com plaquinhas de metal de tamanhos diferentes. Toca-se puxando e soltando as plaquinhas com os polegares."
+  },
+
+  /* Falas gerais do Modo Áudio. */
+  falas: {
+    abertura: "Modo Áudio ligado. Aperte Enter para começar.",
+    teclas: "Use as setas para escolher. Enter para confirmar. Esc para voltar. Barra de espaço para ouvir de novo. H para ajuda.",
+    boasVindas: "Bem-vindo ao Álbum das Raízes! Vamos conhecer pessoas, lugares e culturas que fazem a nossa história.",
+    erro: ["Quase! Tente de novo.", "Não foi dessa vez. Você consegue!", "Tente outra vez, você está aprendendo!"],
+    estacaoFechada: "Esta estação ainda está fechada. Complete a estação anterior para abrir."
+  },
+
+  /* Ajuda falada (tecla H) de cada tela do Modo Áudio. */
+  ajuda: {
+    inicio: "Escolha o seu ano com as setas e aperte Enter.",
+    mapa: "Este é o menu das estações. Use as setas para ouvir cada estação e aperte Enter para entrar. Em cada estação você ganha figurinhas para o seu álbum.",
+    album: "Este é o seu álbum. Use as setas para folhear as figurinhas. Esc volta para o menu.",
+    estacao1: "Ouça a pista e escolha quem é. Use as setas e Enter, ou aperte o número da opção.",
+    viagem: "Escolha um país com as setas e aperte Enter para visitar. Depois de visitar todos, escolha Perguntas da viagem.",
+    pergunta: "Ouça a pergunta. Escolha com as setas e Enter, ou aperte o número da opção. A barra de espaço repete a pergunta.",
+    estacao3: "Escolha uma brincadeira com as setas e aperte Enter.",
+    terramar: "Quando ouvir Terra, aperte a seta para a esquerda. Quando ouvir Mar, aperte a seta para a direita. Não tem pressa.",
+    mancala: "Use as setas para escolher uma das suas casas. Enter joga as sementes da casa. T conta como está o tabuleiro. H, de novo, abre as regras. Esc volta.",
+    regras: "Use as setas para ouvir cada regra. Enter repete a regra. Esc volta para o jogo.",
+    estacao4: "Primeiro, ouça os instrumentos. Depois, responda às perguntas para ganhar as figurinhas.",
+    instrumentos: "Use as setas para escolher um instrumento e aperte Enter para ouvir o som dele.",
+    figurinha: "Você ganhou uma figurinha! Aperte Enter para continuar.",
+    braille: "Escreva a letra usando as teclas F, D, S, J, K e L, como os pontos 1 a 6 da cela braille. F é o ponto 1, D é o ponto 2, S é o ponto 3, J é o ponto 4, K é o ponto 5 e L é o ponto 6. Aperte as teclas juntas e solte. Esc pula esta atividade."
+  },
+
+  /* Mancala falada: nível mais fácil e ritmo lento. */
+  mancala: {
+    abertura: "Mancala, o jogo das sementes. Você joga com as casas 1 a {n}. O computador joga com as casas {n1} a {n2}. Cada casa começa com {s} sementes. As sementes andam de casa em casa, sempre para a casa seguinte.",
+    regras: [
+      "Na sua vez, escolha uma das suas casas que tenha sementes.",
+      "Você pega todas as sementes da casa e coloca uma em cada casa seguinte.",
+      "Se a última semente cair numa casa do computador e essa casa ficar com 2 ou 3 sementes, você captura essas sementes. Elas vão para o seu depósito.",
+      "O computador joga do mesmo jeito.",
+      "Ganha quem tiver mais sementes no depósito no fim do jogo."
+    ]
+  },
+
+  /* Atividade opcional de braille (liga e desliga na Área do professor).
+     Letras da Grafia Braille para a Língua Portuguesa: pontos de cada letra. */
+  braille: {
+    convite: "Quer escrever em braille a primeira letra de {nome}? É a letra {letra}.",
+    letras: {
+      a: [1], b: [1, 2], c: [1, 4], d: [1, 4, 5], e: [1, 5], f: [1, 2, 4], g: [1, 2, 4, 5],
+      h: [1, 2, 5], i: [2, 4], j: [2, 4, 5], k: [1, 3], l: [1, 2, 3], m: [1, 3, 4],
+      n: [1, 3, 4, 5], o: [1, 3, 5], p: [1, 2, 3, 4], q: [1, 2, 3, 4, 5], r: [1, 2, 3, 5],
+      s: [2, 3, 4], t: [2, 3, 4, 5], u: [1, 3, 6], v: [1, 2, 3, 6], w: [2, 4, 5, 6],
+      x: [1, 3, 4, 6], y: [1, 3, 4, 5, 6], z: [1, 3, 5, 6],
+      "á": [1, 2, 3, 5, 6], "é": [1, 2, 3, 4, 5, 6], "í": [3, 4], "ó": [3, 4, 6], "ú": [2, 3, 4, 5, 6],
+      "â": [1, 6], "ê": [1, 2, 6], "ô": [1, 4, 5, 6], "à": [1, 2, 4, 6], "ã": [3, 4, 5], "õ": [2, 4, 6], "ç": [1, 2, 3, 4, 6]
+    }
+  }
+};

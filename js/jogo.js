@@ -19,10 +19,21 @@ const J = (function () {
   const CHAVE = "albumDasRaizes.v1";
 
   function progressoVazio() {
-    return { ano: null, som: false, anos: { 1: anoVazio(), 2: anoVazio(), 3: anoVazio() } };
+    return { ano: null, som: false, acess: acessPadrao(), anos: { 1: anoVazio(), 2: anoVazio(), 3: anoVazio() } };
   }
   function anoVazio() {
-    return { figurinhas: [], liberadas: false, quebraCabeca: false, comemorou: false };
+    return { figurinhas: [], estrelas: [], liberadas: false, quebraCabeca: false, comemorou: false };
+  }
+  // Escolhas de acessibilidade (ficam salvas neste computador).
+  function acessPadrao() {
+    return {
+      modoAudio: false,     // o jogo fala e funciona só pelo teclado
+      vozPropria: true,     // voz do próprio jogo (desligar com NVDA ou Narrador)
+      vozLenta: false,      // voz mais devagar
+      letrasGrandes: false, // letras e botões maiores
+      altoContraste: false, // cores de alto contraste
+      braille: false        // atividade de braille no Modo Áudio (Área do professor)
+    };
   }
 
   function carregar() {
@@ -33,10 +44,12 @@ const J = (function () {
       const base = progressoVazio();
       base.ano = [1, 2, 3].indexOf(d.ano) >= 0 ? d.ano : null;
       base.som = d.som === true;
+      if (d.acess) Object.keys(base.acess).forEach(function (k) { if (typeof d.acess[k] === "boolean") base.acess[k] = d.acess[k]; });
       [1, 2, 3].forEach(function (a) {
         const x = d.anos && d.anos[a];
         if (x) {
           base.anos[a].figurinhas = Array.isArray(x.figurinhas) ? x.figurinhas.filter(function (f) { return typeof f === "string"; }) : [];
+          base.anos[a].estrelas = Array.isArray(x.estrelas) ? x.estrelas.filter(function (f) { return typeof f === "string"; }) : [];
           base.anos[a].liberadas = x.liberadas === true;
           base.anos[a].quebraCabeca = x.quebraCabeca === true;
           base.anos[a].comemorou = x.comemorou === true;
@@ -57,6 +70,20 @@ const J = (function () {
   function ano() { return dados.ano || 1; }
   function prog() { return dados.anos[ano()]; }
   function tem(id) { return prog().figurinhas.indexOf(id) >= 0; }
+  function temEstrela(id) { return prog().estrelas.indexOf(id) >= 0; }
+  function darEstrela(id) { if (!temEstrela(id)) { prog().estrelas.push(id); salvar(); } }
+  function acess() { return dados.acess; }
+  function modoAudio() { return dados.acess.modoAudio; }
+  function descricao(id) { return (CONTEUDO.acessibilidade.descricoes[id]) || ""; }
+
+  // Aplica letras grandes, alto contraste e a voz escolhida.
+  function aplicarAcessibilidade() {
+    const raiz = document.documentElement;
+    raiz.classList.toggle("letras-grandes", dados.acess.letrasGrandes);
+    raiz.classList.toggle("alto-contraste", dados.acess.altoContraste);
+    document.body.classList.toggle("modo-audio", dados.acess.modoAudio);
+    VOZ.configurar({ ligada: dados.acess.vozPropria, lenta: dados.acess.vozLenta });
+  }
 
   /* =================== CONTEÚDO POR ANO =================== */
 
@@ -238,15 +265,19 @@ const J = (function () {
     opcoes = opcoes || {};
     const est = estacaoDoItem(item.id);
     const cor = est <= 4 ? CONTEUDO.estacoes[est - 1].cor : "#e9c46a";
+    // A ilustração tem texto alternativo (descrição) para leitores de tela.
+    const rotuloArte = descricao(item.id) ? "Ilustração: " + descricao(item.id) : (opcoes.semNome ? item.nome : "");
     return h("span", { class: "figurinha" + (opcoes.grande ? " grande" : "") + (opcoes.semNome ? " sem-nome" : ""), style: "--cor-estacao:" + cor + ";--cor-fundo:" + item.cor },
-      h("span", { class: "figurinha-arte", html: DESENHOS.svg(item.desenho, opcoes.semNome ? item.nome : "") }),
+      h("span", { class: "figurinha-arte", html: DESENHOS.svg(item.desenho, rotuloArte) }),
       opcoes.semNome ? null : h("span", { class: "figurinha-nome" }, item.nome),
-      opcoes.comRotulo ? h("span", { class: "figurinha-rotulo" }, rotuloDoItem(item)) : null);
+      opcoes.comRotulo ? h("span", { class: "figurinha-rotulo" }, rotuloDoItem(item)) : null,
+      temEstrela(item.id) ? h("span", { class: "estrela-braille" }, icone("estrelaIcone"), h("span", null, "Braille")) : null);
   }
 
   /* Dá uma figurinha à criança e mostra a janela "Nova figurinha!".
      Depois de fechar a janela, chama "continuar". */
   function ganhar(id, continuar) {
+    if (modoAudio()) { MODO_AUDIO.ganhar(id, continuar); return; }
     const item = buscarItem(id);
     const nova = !tem(id);
     const estacao = estacaoDoItem(id);
@@ -374,13 +405,19 @@ const J = (function () {
     fecharTodas();
     telaAtual = nome;
     ajudaAtual = nome;
-    document.body.classList.toggle("ano-1", dados.ano === 1);
+    document.body.classList.toggle("ano-1", dados.ano === 1 && !modoAudio());
     document.body.dataset.tela = nome;
     telaEl.innerHTML = "";
+    window.scrollTo(0, 0);
+    MODO_AUDIO.limpar();
+    // No Modo Áudio, cada tela tem uma versão falada (js/modo-audio.js).
+    if (modoAudio() && MODO_AUDIO.telas[nome]) {
+      MODO_AUDIO.telas[nome](telaEl, extra);
+      return;
+    }
     const f = TELAS[nome];
     f(telaEl, extra);
     telaEl.focus({ preventScroll: true });
-    window.scrollTo(0, 0);
   }
 
   function titulo(texto, cor) {
@@ -412,6 +449,9 @@ const J = (function () {
         h("span", { class: "botao-ano-conta" }, icone("album"), h("span", null, Math.min(temA, total) + " de " + total)));
     });
     tela.append(h("div", { class: "inicio" },
+      h("button", { type: "button", class: "botao botao-acessibilidade", id: "botao-acessibilidade", onclick: painelAcessibilidade },
+        icone("acessibilidade"), h("span", null, "Acessibilidade"),
+        h("span", { class: "so-leitor" }, ": Modo Áudio para jogar só com o teclado e ouvindo, letras maiores e alto contraste")),
       h("div", { class: "inicio-criancas", html: DESENHOS.criancas() }),
       h("h1", { class: "inicio-titulo" }, "Álbum das Raízes"),
       h("p", { class: "inicio-frase" }, "Conheça pessoas, lugares e culturas que fazem nossa história!"),
@@ -821,7 +861,7 @@ const J = (function () {
         coluna1.append(bn);
       });
       embaralhar(grupo).forEach(function (item) {
-        const bi = h("button", { type: "button", class: "ligar-imagem", "aria-label": "Imagem", onclick: function () { selecionar("imagem", item, bi); } },
+        const bi = h("button", { type: "button", class: "ligar-imagem", "aria-label": "Imagem: " + (descricao(item.id) || "sem descrição"), onclick: function () { selecionar("imagem", item, bi); } },
           h("span", { class: "figurinha-arte", style: "--cor-fundo:" + item.cor, html: DESENHOS.svg(item.desenho) }));
         coluna2.append(bi);
       });
@@ -962,6 +1002,7 @@ const J = (function () {
 
   /* =================== COMO JOGAR =================== */
   function comoJogar() {
+    if (modoAudio()) { MODO_AUDIO.ajuda(); return; }
     const chave = ajudaDe[ajudaAtual] || ajudaAtual;
     const passos = CONTEUDO.ajuda[chave] || CONTEUDO.ajuda.mapa;
     abrirJanela(h("div", { class: "como-jogar" },
@@ -992,6 +1033,55 @@ const J = (function () {
     pausado = false;
     const fila = filaPausa; filaPausa = [];
     fila.forEach(function (fn) { fn(); });
+  }
+
+  /* =================== ACESSIBILIDADE =================== */
+  // Uma caixa de marcar com texto de explicação.
+  function marcador(id, texto, ajuda, chave, aoMudar) {
+    const caixa = h("input", { type: "checkbox", id: id, "aria-describedby": id + "-ajuda" });
+    caixa.checked = !!dados.acess[chave];
+    caixa.addEventListener("change", function () {
+      dados.acess[chave] = caixa.checked;
+      salvar();
+      aplicarAcessibilidade();
+      if (aoMudar) aoMudar(caixa.checked);
+    });
+    return h("div", { class: "marcador" },
+      caixa,
+      h("label", { for: id }, texto),
+      h("p", { id: id + "-ajuda", class: "marcador-ajuda" }, ajuda));
+  }
+
+  // Painel "Acessibilidade" (na tela inicial e na Área do professor).
+  function painelAcessibilidade(comBraille) {
+    const modoAntes = dados.acess.modoAudio;
+    const aviso = h("p", { class: "aviso-professor", role: "status" });
+    const itens = [
+      marcador("ac-audio", "Modo Áudio", "O jogo fala sozinho e funciona só pelo teclado: setas para escolher, Enter para confirmar, Esc para voltar, barra de espaço para repetir e H para ajuda. Para estudantes cegos ou com baixa visão.", "modoAudio"),
+      marcador("ac-voz", "Voz do próprio jogo", "Deixe ligada para o jogo falar sozinho. Desligue se o computador usa o NVDA ou o Narrador do Windows, para não ouvir duas vozes ao mesmo tempo.", "vozPropria"),
+      marcador("ac-lenta", "Voz mais devagar", "A voz do jogo fala mais devagar.", "vozLenta"),
+      marcador("ac-grandes", "Letras e botões maiores", "Aumenta o tamanho de tudo na tela.", "letrasGrandes"),
+      marcador("ac-contraste", "Alto contraste", "Fundo preto, letras brancas e destaques em amarelo.", "altoContraste")
+    ];
+    if (comBraille === true) {
+      itens.push(marcador("ac-braille", "Atividade de braille (Modo Áudio)", "Ao ganhar figurinhas de pessoas e países, o estudante pode escrever em braille a primeira letra do nome, usando as teclas F, D, S, J, K e L como os pontos 1 a 6. Se acertar, ganha uma estrela extra.", "braille"));
+    }
+    // Ao fechar (botão ou Esc): se o Modo Áudio mudou, recomeça pela tela certa.
+    function aoFechar() {
+      if (dados.acess.modoAudio !== modoAntes) mostrar(dados.ano ? "mapa" : "inicio");
+    }
+    abrirJanela(h("div", { class: "professor acessibilidade" },
+      h("h2", null, icone("acessibilidade"), h("span", null, "Acessibilidade")),
+      h("p", null, "As escolhas ficam guardadas neste computador, neste navegador."),
+      h("div", { class: "marcadores" }, itens),
+      h("div", { class: "fila-botoes" },
+        botao("Testar a voz", "somLigado", function () {
+          VOZ.destravar();
+          VOZ.falar("Olá! Esta é a voz do Álbum das Raízes.");
+          aviso.textContent = VOZ.temSintese ? (dados.acess.vozPropria ? "Se não ouviu nada, confira o volume e se há uma voz em português instalada no computador." : "A voz do próprio jogo está desligada: o NVDA ou o Narrador vai ler os avisos.") : "Este navegador não tem voz. Use o Google Chrome ou o Microsoft Edge, ou um leitor de tela.";
+        }),
+        botao("Fechar", "fechar", fecharJanela, "botao-principal")),
+      aviso), { aoFechar: aoFechar });
   }
 
   /* =================== ÁREA DO PROFESSOR =================== */
@@ -1030,6 +1120,7 @@ const J = (function () {
           salvar();
           aviso.textContent = "Pronto! Todas as estações (e o Desafio final do 3º ano) estão liberadas em todos os anos.";
         }, "botao-principal"),
+        botao("Acessibilidade e atividade de braille", "acessibilidade", function () { painelAcessibilidade(true); }),
         botao("Apagar progresso", "lixeira", function () { confirmarApagar(); }, "botao-perigo"),
         botao("Fechar", "fechar", function () { fecharJanela(); mostrar(telaAtual === "inicio" ? "inicio" : "mapa"); })),
       aviso));
@@ -1043,8 +1134,10 @@ const J = (function () {
         h("button", { type: "button", class: "botao", "data-foco": true, onclick: fecharJanela }, icone("setaEsq"), h("span", null, "Não, voltar")),
         botao("Sim, apagar tudo", "lixeira", function () {
           const som = dados.som;
+          const escolhas = dados.acess; // as escolhas de acessibilidade continuam
           dados = progressoVazio();
           dados.som = som;
+          dados.acess = escolhas;
           salvar();
           fecharTodas();
           mostrar("inicio");
@@ -1067,14 +1160,30 @@ const J = (function () {
     });
     document.getElementById("botao-professor").addEventListener("click", function () { if (pausado) return; areaProfessor(); });
     document.addEventListener("keydown", function (ev) {
-      if (ev.key === "Escape" && pilha.length) {
-        if (pausado) continuarJogo(); else fecharJanela();
+      if (pilha.length) {
+        if (ev.key === "Escape") { if (pausado) continuarJogo(); else fecharJanela(); }
+        return;
       }
+      const alvo = ev.target;
+      if (alvo && /^(INPUT|SELECT|TEXTAREA)$/.test(alvo.tagName)) return;
+      // Modo Áudio: setas, Enter, Esc, espaço, H e as outras teclas do jogo.
+      if (modoAudio()) { MODO_AUDIO.tecla(ev); return; }
+      // Na tela inicial, a tecla A abre a Acessibilidade.
+      if (telaAtual === "inicio" && (ev.key === "a" || ev.key === "A") && !ev.ctrlKey && !ev.altKey && !ev.metaKey) {
+        ev.preventDefault();
+        painelAcessibilidade();
+      }
+    });
+    document.addEventListener("keyup", function (ev) {
+      if (!pilha.length && modoAudio()) MODO_AUDIO.teclaSolta(ev);
     });
     // Impede que o clique duplo selecione textos sem querer.
     document.addEventListener("dblclick", function (ev) { ev.preventDefault(); });
     atualizarBotaoSom();
-    mostrar(dados.ano ? "mapa" : "inicio");
+    aplicarAcessibilidade();
+    // No Modo Áudio, a primeira tela pede uma tecla (o navegador só deixa
+    // o jogo falar depois que alguém aperta uma tecla ou clica).
+    mostrar(modoAudio() ? "abertura" : (dados.ano ? "mapa" : "inicio"));
   }
 
   // O que as brincadeiras (js/brincadeiras.js) podem usar.
@@ -1083,6 +1192,16 @@ const J = (function () {
     embaralhar: embaralhar, sortear: sortear, ano: ano, explica: explica, acerto: acerto,
     tocar: tocar, definirAjuda: definirAjuda, anunciar: anunciar,
     estaPausado: function () { return pausado; }
+  };
+
+  // O que o Modo Áudio (js/modo-audio.js) usa do jogo principal.
+  api.interno = {
+    telaEl: telaEl, mostrar: mostrar, salvar: salvar,
+    dados: function () { return dados; }, acess: acess, prog: prog, ano: ano,
+    tem: tem, temEstrela: temEstrela, darEstrela: darEstrela,
+    doAno: doAno, itensDaEstacao: itensDaEstacao, estacaoDoItem: estacaoDoItem, buscarItem: buscarItem,
+    contagem: contagem, completa: completa, liberada: liberada, albumCompleto: albumCompleto, desafioLiberado: desafioLiberado,
+    explica: explica, pista: pista, mascarar: mascarar, paginasDoAlbum: paginasDoAlbum
   };
 
   document.addEventListener("DOMContentLoaded", iniciar);

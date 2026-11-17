@@ -546,7 +546,7 @@ const DESENHOS = (function () {
 
   D.casa = function () { return '<path d="M12 50 L50 14 L88 50" stroke="currentColor" stroke-width="10" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M24 46 L24 88 L42 88 L42 64 L58 64 L58 88 L76 88 L76 46" fill="currentColor"/>'; };
   D.album = function () { return '<rect x="14" y="10" width="72" height="80" rx="8" fill="none" stroke="currentColor" stroke-width="8"/><rect x="26" y="22" width="20" height="24" rx="3" fill="currentColor"/><rect x="54" y="22" width="20" height="24" rx="3" fill="currentColor"/><rect x="26" y="54" width="20" height="24" rx="3" fill="currentColor"/><path d="M64 54 L67 62 L75 62 L69 67 L71 76 L64 71 L57 76 L59 67 L53 62 L61 62 Z" fill="currentColor"/>'; };
-  D.ajuda = function () { return '<circle cx="50" cy="50" r="42" fill="currentColor"/><path d="M36 38 Q36 22 50 22 Q66 22 66 36 Q66 46 54 50 L54 60" stroke="#fff" stroke-width="10" fill="none" stroke-linecap="round"/><circle cx="54" cy="76" r="6.5" fill="#fff"/>'; };
+  D.ajuda = function () { return '<circle cx="50" cy="50" r="42" fill="none" stroke="currentColor" stroke-width="8"/><path d="M36 38 Q36 22 50 22 Q66 22 66 36 Q66 46 54 50 L54 60" stroke="currentColor" stroke-width="10" fill="none" stroke-linecap="round"/><circle cx="54" cy="76" r="6.5" fill="currentColor"/>'; };
   D.pausa = function () { return '<rect x="22" y="16" width="20" height="68" rx="5" fill="currentColor"/><rect x="58" y="16" width="20" height="68" rx="5" fill="currentColor"/>'; };
   D.play = function () { return '<path d="M26 14 L84 50 L26 86 Z" fill="currentColor" stroke="currentColor" stroke-width="6" stroke-linejoin="round"/>'; };
   D.somLigado = function () { return '<path d="M12 38 L30 38 L52 18 L52 82 L30 62 L12 62 Z" fill="currentColor"/><path d="M64 34 Q74 50 64 66 M74 24 Q90 50 74 76" stroke="currentColor" stroke-width="7" fill="none" stroke-linecap="round"/>'; };
@@ -568,6 +568,8 @@ const DESENHOS = (function () {
   D.semente = function () { return '<ellipse cx="34" cy="50" rx="14" ry="10" fill="#f5deb3" stroke="' + C + '" stroke-width="4"/><ellipse cx="66" cy="40" rx="14" ry="10" fill="#f5deb3" stroke="' + C + '" stroke-width="4"/><ellipse cx="58" cy="68" rx="14" ry="10" fill="#f5deb3" stroke="' + C + '" stroke-width="4"/>'; };
   D.mapa = function () { return '<path d="M8 20 L34 10 L66 22 L92 12 L92 82 L66 92 L34 80 L8 90 Z" fill="#c8e6c9" stroke="' + C + '" stroke-width="5" stroke-linejoin="round"/><path d="M34 10 L34 80 M66 22 L66 92" stroke="' + C + '" stroke-width="4"/><path d="M18 70 Q40 40 56 56 T82 30" stroke="#e53935" stroke-width="5" stroke-dasharray="6 5" fill="none"/>'; };
   D.estrela = D.estrela; // (a figurinha de Dandara também serve de ícone)
+  // Acessibilidade: pessoa de braços abertos dentro de um círculo.
+  D.acessibilidade = function () { return '<circle cx="50" cy="50" r="44" fill="none" stroke="currentColor" stroke-width="8"/><circle cx="50" cy="26" r="8" fill="currentColor"/><path d="M24 40 L76 40 M50 40 L50 62 M50 62 L36 84 M50 62 L64 84" stroke="currentColor" stroke-width="8" stroke-linecap="round" fill="none"/>'; };
 
   // Criança da brincadeira Terra-Mar (corpo inteiro, braços para cima).
   D.crianca = function () {

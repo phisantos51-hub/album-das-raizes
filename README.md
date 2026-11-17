@@ -22,11 +22,32 @@ No 3º ano, depois das quatro estações, abre o **Desafio final**.
 - Sem anúncios, sem links externos e sem coleta de dados. O progresso fica guardado só no navegador de cada computador.
 - Todas as ilustrações são desenhadas pelo próprio jogo (sem fotos e sem imagens da internet). As personalidades aparecem com desenhos simbólicos, não com retratos.
 
+## Acessibilidade e Modo Áudio
+
+Na tela inicial há o botão **Acessibilidade** (também se abre com a tecla **A**). O mesmo painel está na **Área do professor**. As escolhas ficam guardadas no navegador daquele computador:
+
+- **Modo Áudio**: o jogo fala sozinho em português e funciona só pelo teclado, para estudantes cegos ou com baixa visão. Teclas, sempre as mesmas:
+  - **setas**: escolher; **Enter**: confirmar; **Esc**: voltar;
+  - **barra de espaço**: ouvir de novo; **H**: ajuda falada;
+  - **números 1, 2, 3...**: escolher a opção direto;
+  - **T** (na mancala): como está o tabuleiro;
+  - **F, D, S, J, K, L** (atividade de braille): pontos 1 a 6.
+- **Voz do próprio jogo**: desligue se o computador usa o **NVDA** ou o **Narrador** do Windows, para não ouvir duas vozes. Aí o leitor de tela lê os avisos do jogo.
+- **Voz mais devagar**.
+- **Letras e botões maiores**.
+- **Alto contraste** (fundo preto, letras brancas e destaques em amarelo).
+- **Atividade de braille** (só na Área do professor): ao ganhar figurinhas de pessoas e países no Modo Áudio, o estudante pode escrever em braille a primeira letra do nome e ganhar uma estrela extra.
+
+No Modo Áudio, o mapa vira um menu falado; o quebra-cabeça vira a “Viagem pela África”; a mancala é falada casa por casa, no nível mais fácil e em ritmo lento; e a Estação 4 tem a “sala dos instrumentos”, com sons criados pelo próprio jogo.
+
+A voz usada é a do próprio computador. No Windows, a voz em português do Brasil (por exemplo, “Maria”) funciona sem internet. Se o jogo não falar, confira em Configurações do Windows → Hora e idioma → Fala se há uma voz em português instalada. Use o Google Chrome ou o Microsoft Edge.
+
 ## Área do professor
 
 Botão discreto **Área do professor**, no canto de baixo da tela. Para entrar, responda a uma conta de soma. Lá é possível:
 
 - **Liberar todas as estações** (em todos os anos, incluindo o Desafio final do 3º ano);
+- **Acessibilidade e atividade de braille** (o mesmo painel da tela inicial, mais a opção de ligar ou desligar o braille);
 - **Apagar progresso** (pede confirmação antes de apagar).
 
 ## Arquivos
@@ -36,7 +57,9 @@ Botão discreto **Área do professor**, no canto de baixo da tela. Para entrar, 
 - `js/conteudo.js`: **todos os textos** (personalidades, países, brincadeiras, cultura e instruções). É aqui que se edita o conteúdo.
 - `js/desenhos.js`: as ilustrações, desenhadas em código.
 - `js/brincadeiras.js`: Terra-Mar, mancala (oware) e shisima.
-- `js/jogo.js`: telas, figurinhas, álbum, pausa, som e Área do professor.
+- `js/jogo.js`: telas, figurinhas, álbum, pausa, som, Acessibilidade e Área do professor.
+- `js/voz.js`: a voz do jogo e os sons criados pelo próprio jogo (incluindo os instrumentos).
+- `js/modo-audio.js`: as telas faladas do Modo Áudio e a atividade de braille.
 - `REVISAR.md`: **lista de todas as informações históricas e culturais** para conferir antes de usar com as turmas.
 
 ## Como editar os textos
@@ -50,3 +73,5 @@ Botão discreto **Área do professor**, no canto de baixo da tela. Para entrar, 
 5. Depois de mudar arquivos, aumente o número `?v=1` no `index.html` (por exemplo, para `?v=2`) em todas as linhas, para os computadores baixarem a versão nova.
 
 No 1º ano, o jogo mostra tudo em letra de imprensa maiúscula automaticamente.
+
+As falas do Modo Áudio, as descrições das ilustrações, onde fica cada país e como se toca cada instrumento ficam no fim do `js/conteudo.js`, na parte **MODO ÁUDIO E ACESSIBILIDADE**.

@@ -8,7 +8,7 @@
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect x='14' y='10' width='72' height='80' rx='8' fill='%23e76f51'/><path d='M50 26 L56 42 L73 42 L59 52 L64 69 L50 59 L36 69 L41 52 L27 42 L44 42 Z' fill='%23ffd166'/></svg>">
   <!-- O "?v=" obriga o navegador a baixar a versão nova dos arquivos.
        Ao mudar algum arquivo, aumente o número em todas as linhas. -->
-  <link rel="stylesheet" href="css/estilo.css?v=1">
+  <link rel="stylesheet" href="css/estilo.css?v=2">
 </head>
 <body>
   <a class="pular" href="#tela">Pular para o jogo</a>
@@ -39,11 +39,15 @@
 
   <!-- Mensagens lidas por leitores de tela. -->
   <div id="anuncio" class="so-leitor" aria-live="polite"></div>
+  <!-- Falas do Modo Áudio para o NVDA e o Narrador (quando a voz do jogo está desligada). -->
+  <div id="anuncio-audio" class="so-leitor" aria-live="polite" aria-atomic="true"></div>
 
   <!-- Todos os textos ficam em js/conteudo.js -->
-  <script src="js/conteudo.js?v=1"></script>
-  <script src="js/desenhos.js?v=1"></script>
-  <script src="js/brincadeiras.js?v=1"></script>
-  <script src="js/jogo.js?v=1"></script>
+  <script src="js/conteudo.js?v=2"></script>
+  <script src="js/desenhos.js?v=2"></script>
+  <script src="js/voz.js?v=2"></script>
+  <script src="js/brincadeiras.js?v=2"></script>
+  <script src="js/modo-audio.js?v=2"></script>
+  <script src="js/jogo.js?v=2"></script>
 </body>
 </html>

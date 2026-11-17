@@ -13,6 +13,94 @@
 
 const BRINCADEIRAS = {};
 
+/* ======================= MOTOR DA MANCALA =======================
+   As regras do jogo, sem tela. Usado pela mancala com mouse (oware)
+   e pela mancala falada do Modo Áudio (js/modo-audio.js).
+   Casas 0..n-1: do estudante. Casas n..2n-1: do computador.
+   As sementes andam sempre para a casa seguinte (0, 1, 2, ... 2n-1, 0...). */
+BRINCADEIRAS.motorMancala = function (cfg) {
+  const n = cfg.casas;
+  function dono(i) { return i < n ? 0 : 1; }
+  function ladoVazio(t, j) {
+    for (let i = j * n; i < j * n + n; i++) if (t[i] > 0) return false;
+    return true;
+  }
+
+  // Calcula o resultado de uma jogada, sem mexer no tabuleiro de verdade.
+  function simular(t, origem) {
+    const novo = t.slice();
+    let sementes = novo[origem];
+    novo[origem] = 0;
+    let pos = origem;
+    const caminho = [];
+    let pulou = false;
+    while (sementes > 0) {
+      pos = (pos + 1) % (2 * n);
+      if (cfg.regrasCompletas && pos === origem) { pulou = true; continue; }
+      novo[pos]++;
+      sementes--;
+      caminho.push(pos);
+    }
+    const jogador = dono(origem);
+    let capt = [];
+    if (dono(pos) !== jogador) {
+      let p = pos;
+      while (p >= 0 && dono(p) !== jogador && (novo[p] === 2 || novo[p] === 3)) {
+        capt.push(p);
+        if (!cfg.capturaEmCadeia) break;
+        p--;
+        if (p < 0 || dono(p) === jogador) break;
+      }
+    }
+    let grandSlam = false;
+    if (cfg.regrasCompletas && capt.length) {
+      // Não vale capturar todas as sementes do adversário de uma vez.
+      const adv = 1 - jogador;
+      let soma = 0, somaCapt = 0;
+      for (let i = adv * n; i < adv * n + n; i++) soma += novo[i];
+      capt.forEach(function (c) { somaCapt += novo[c]; });
+      if (soma === somaCapt) { grandSlam = true; capt = []; }
+    }
+    let ganho = 0;
+    capt.forEach(function (c) { ganho += novo[c]; });
+    const final = novo.slice();
+    capt.forEach(function (c) { final[c] = 0; });
+    return { depoisDeSemear: novo, final: final, caminho: caminho, capturas: capt, ganho: ganho, pulou: pulou, grandSlam: grandSlam };
+  }
+
+  function jogadasValidas(t, j) {
+    const lista = [];
+    for (let i = j * n; i < j * n + n; i++) if (t[i] > 0) lista.push(i);
+    if (cfg.regrasCompletas && ladoVazio(t, 1 - j)) {
+      // O adversário está sem sementes: é preciso dar sementes a ele.
+      return lista.filter(function (i) { return !ladoVazio(simular(t, i).final, 1 - j); });
+    }
+    return lista;
+  }
+
+  function escolhaDoComputador(tab, nivel) {
+    const validas = jogadasValidas(tab, 1);
+    if (nivel === 1) return J.sortear(validas);
+    let melhor = -999, opcoes = [];
+    validas.forEach(function (i) {
+      const r = simular(tab, i);
+      let nota = r.ganho;
+      if (nivel === 3) {
+        // Olha também a melhor resposta da criança.
+        let pior = 0;
+        jogadasValidas(r.final, 0).forEach(function (k) { pior = Math.max(pior, simular(r.final, k).ganho); });
+        nota -= pior * 0.9;
+      }
+      if (nota > melhor + 0.01) { melhor = nota; opcoes = [i]; }
+      else if (Math.abs(nota - melhor) <= 0.01) opcoes.push(i);
+    });
+    return J.sortear(opcoes);
+  }
+
+  return { n: n, dono: dono, ladoVazio: ladoVazio, simular: simular, jogadasValidas: jogadasValidas, escolhaDoComputador: escolhaDoComputador };
+};
+
+
 /* ======================= TERRA-MAR ======================= */
 BRINCADEIRAS.terramar = function (area, terminou) {
   const h = J.h, icone = J.icone;
@@ -114,82 +202,9 @@ BRINCADEIRAS.oware = function (area, terminou, nivelEscolhido) {
   let jogadasSemCaptura = 0;
   let acabou = false;
 
-  function dono(i) { return i < n ? 0 : 1; }
-  function ladoVazio(t, j) {
-    for (let i = j * n; i < j * n + n; i++) if (t[i] > 0) return false;
-    return true;
-  }
-
-  // Calcula o resultado de uma jogada, sem mexer no tabuleiro de verdade.
-  function simular(t, origem) {
-    const novo = t.slice();
-    let sementes = novo[origem];
-    novo[origem] = 0;
-    let pos = origem;
-    const caminho = [];
-    let pulou = false;
-    while (sementes > 0) {
-      pos = (pos + 1) % (2 * n);
-      if (cfg.regrasCompletas && pos === origem) { pulou = true; continue; }
-      novo[pos]++;
-      sementes--;
-      caminho.push(pos);
-    }
-    const jogador = dono(origem);
-    let capt = [];
-    if (dono(pos) !== jogador) {
-      let p = pos;
-      while (p >= 0 && dono(p) !== jogador && (novo[p] === 2 || novo[p] === 3)) {
-        capt.push(p);
-        if (!cfg.capturaEmCadeia) break;
-        p--;
-        if (p < 0 || dono(p) === jogador) break;
-      }
-    }
-    let grandSlam = false;
-    if (cfg.regrasCompletas && capt.length) {
-      // Não vale capturar todas as sementes do adversário de uma vez.
-      const adv = 1 - jogador;
-      let soma = 0, somaCapt = 0;
-      for (let i = adv * n; i < adv * n + n; i++) soma += novo[i];
-      capt.forEach(function (c) { somaCapt += novo[c]; });
-      if (soma === somaCapt) { grandSlam = true; capt = []; }
-    }
-    let ganho = 0;
-    capt.forEach(function (c) { ganho += novo[c]; });
-    const final = novo.slice();
-    capt.forEach(function (c) { final[c] = 0; });
-    return { depoisDeSemear: novo, final: final, caminho: caminho, capturas: capt, ganho: ganho, pulou: pulou, grandSlam: grandSlam };
-  }
-
-  function jogadasValidas(t, j) {
-    const lista = [];
-    for (let i = j * n; i < j * n + n; i++) if (t[i] > 0) lista.push(i);
-    if (cfg.regrasCompletas && ladoVazio(t, 1 - j)) {
-      // O adversário está sem sementes: é preciso dar sementes a ele.
-      return lista.filter(function (i) { return !ladoVazio(simular(t, i).final, 1 - j); });
-    }
-    return lista;
-  }
-
-  function escolhaDoComputador() {
-    const validas = jogadasValidas(tab, 1);
-    if (nivel === 1) return J.sortear(validas);
-    let melhor = -999, opcoes = [];
-    validas.forEach(function (i) {
-      const r = simular(tab, i);
-      let nota = r.ganho;
-      if (nivel === 3) {
-        // Olha também a melhor resposta da criança.
-        let pior = 0;
-        jogadasValidas(r.final, 0).forEach(function (k) { pior = Math.max(pior, simular(r.final, k).ganho); });
-        nota -= pior * 0.9;
-      }
-      if (nota > melhor + 0.01) { melhor = nota; opcoes = [i]; }
-      else if (Math.abs(nota - melhor) <= 0.01) opcoes.push(i);
-    });
-    return J.sortear(opcoes);
-  }
+  const motor = BRINCADEIRAS.motorMancala(cfg);
+  const dono = motor.dono, ladoVazio = motor.ladoVazio, simular = motor.simular, jogadasValidas = motor.jogadasValidas;
+  function escolhaDoComputador() { return motor.escolhaDoComputador(tab, nivel); }
 
   /* ----- Tela ----- */
   const caixa = J.caixaMensagem();
